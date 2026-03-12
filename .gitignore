@@ -1,0 +1,9 @@
+psychoret.zip
+data/
+__pycache__/
+*.pyc
+.DS_Store
+proof_of_principle_different_timing.xlsx
+make_stim.m
+stim_list_new.xlsx
+stim_list.xlsx
