@@ -25,6 +25,8 @@ The next is a 2 checkerboards. If the code detects two images (i.e. your own fav
 # Notes on Masks
 The length of you scan will be determined by the number of mask images in the subfolder you select and how long you specify you want each mask to appear. 
 The masks are shown in order - see the folder for an idea of naming and filetype formats.  
+N.B. There is no built in blank/null time at the beginning nor end - the masks fully control what is on the screen. 
+To have empty time, use empty masks - and duplicate if more time is needed, or gaps or desired during stimulus presentation.
 
 # Notes on Fixation
 The Fixation point will change from red to green, on average, every 20 seconds. 
