@@ -507,7 +507,7 @@ def run(expInfo, thisExp, win, globalClock=None, thisSession=None):
     text_3 = visual.TextStim(
         win=win,
         name="text_3",
-        text="Waiting for trigger\n",
+        text="Scanner noises will begin soon,\n stimuli will appear shortly after",
         font="Arial",
         pos=(0, 0),
         draggable=False,
