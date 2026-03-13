@@ -485,13 +485,13 @@ def run(expInfo, thisExp, win, globalClock=None, thisSession=None):
         preloaded_images.append(np.flipud(img_array))
 
     total_repeats = int(len(mask_files) * calc_mask_repeats)
-    # Calculate this here - we overwrite mask files to repeat. # TODO better variables
+    # Given this many masks, and the duration, how long should the scan be.
     scan_duration = int(len(mask_files) * total_stim_dur)
     # on average fixation color changes every 20 seconds.
     number_of_rg_switches = int(scan_duration / 20)
     # was fixed at 15 before, but depends on number of masks, etc. 20s approx
 
-    mask_files = [x for x in mask_files for _ in range(int(calc_mask_repeats))]
+    rep_mask_files = [x for x in mask_files for _ in range(int(calc_mask_repeats))]
     print("Done loading images.")
     print("--" * 20)
     # if two images provided, this handles flipping
@@ -821,7 +821,7 @@ def run(expInfo, thisExp, win, globalClock=None, thisSession=None):
             curr_carrier = np.abs(curr_carrier - 1)
         else:
             ret_stim_01.setImage(preloaded_images[stim_ixs.pop()])
-        ret_stim_01.setMask(os.path.join(mask_folder, mask_files.pop(0)))
+        ret_stim_01.setMask(os.path.join(mask_folder, rep_mask_files.pop(0)))
         fixation_background.setImage("background_radial_grid_v1.png")
         polygon.setFillColor(stim_color)
         polygon.setLineColor(stim_color)
