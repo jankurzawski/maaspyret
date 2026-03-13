@@ -39,4 +39,5 @@ We save button presses, but accuracy calculations/attention quantification is cu
 
 # PsychoPy Versions
 Tested and working with version:
- - 2024.2.4
+ - 2024.2.4 on Mac M4
+ - 2026.1.1 on Mac M4
