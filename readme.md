@@ -25,24 +25,37 @@ All previous parameters EXCEPT mask/carrier are saved.
 
 # Notes on Carrier Stimuli
 Two stimuli are provided currently, but more will be added in the future. 
+<img src="./carriers/kendrick_mix/001.png" alt="Noise and Stuff" width="100">
+
 First, stimuli developed by Dr. Kendrick Kay that consist of noise background with objects, sfaces etc. 
 They were taken from [here](https://kendrickkay.net/analyzePRF/) and modified for size and png format. 
-For large collections of carriers, they will be selected randomly and displayed. 
-The next is a 2 checkerboards. If the code detects two images (i.e. your own favorite checkerboard), it will alternate between these. 
+For large collections of carriers, they will be selected randomly and displayed.
+
+<img src="./carriers/quick_checkerboard/radial_checkerboard_A.png" alt="Checkerboard" width="100">
+
+The next is 2 very simple checkerboards. If the code detects two images (i.e. your own favorite checkerboard), it will alternate between these. 
 
 # Current Masks
 
 ## bars_nyu
+<img src="./masks/bars_nyu/bars_nyu_0035.png" alt="Vertical Bar" width="100">
+
 Straight bars moving back and forth along horizontal, vertical and diagonal axes. Standard bar retinotopy.
 
-## wedge_nyu
+## ringswedge_nyu
+<img src="./masks/ringswedge_nyu/ringswedge_nyu_0035.png" alt="Wedge, left hemifield" width="100">
+
 Wedges (full quadrant sized) rotating around the center and eccentricity rings. 
 
 ## logbar
+<img src="./masks/log_bar/mask075.png" alt="Vertical Log Bar" width="100">
+
 Typical bar stimulus, except warped on log scale to match cortical magnification. 
 Bar is thinner towards fovea and wider in periphery.
 
 ## log_bar_deconstructed
+<img src="./masks/log_bar_deconstructed/mask_075.png" alt="A mixture of split log bars" width="100">
+
 The log bar stimulus, split into 5ths, with several components shown simulutaneously. 
 Results in shorter overall duration, however is untested outside of simulation.
 
