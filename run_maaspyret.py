@@ -484,6 +484,8 @@ def run(expInfo, thisExp, win, globalClock=None, thisSession=None):
         # flip it vertically so it shows up correctly.
         preloaded_images.append(np.flipud(img_array))
 
+    num_images = len(preloaded_images)
+
     total_repeats = int(len(mask_files) * calc_mask_repeats)
     # Given this many masks, and the duration, how long should the scan be.
     scan_duration = int(len(mask_files) * total_stim_dur)
@@ -805,8 +807,8 @@ def run(expInfo, thisExp, win, globalClock=None, thisSession=None):
         # this ensures that we have no repeates.
 
         # This 0 to 100 depends on how many images we have in carrier folder, right?
-        # TODO fix this - should be outside of loop, and no magic numbers.
-        stim_ixs = np.random.randint(0, 100, size=13).tolist()
+        stim_ixs = np.random.randint(low=0, high=num_images)
+        # stim_ixs = np.random.randint(low=0, high=num_images, size=13).tolist()
 
         # mask_img = preloaded_masks.pop(0)
 
@@ -820,7 +822,7 @@ def run(expInfo, thisExp, win, globalClock=None, thisSession=None):
             ret_stim_01.setImage(preloaded_images[curr_carrier])
             curr_carrier = np.abs(curr_carrier - 1)
         else:
-            ret_stim_01.setImage(preloaded_images[stim_ixs.pop()])
+            ret_stim_01.setImage(preloaded_images[stim_ixs])
         ret_stim_01.setMask(os.path.join(mask_folder, rep_mask_files.pop(0)))
         fixation_background.setImage("background_radial_grid_v1.png")
         polygon.setFillColor(stim_color)
