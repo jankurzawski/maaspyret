@@ -565,7 +565,7 @@ def run(expInfo, thisExp, win, globalClock=None, thisSession=None):
 
     total_repeats = int(len(mask_files) * calc_mask_repeats)
     # Given this many masks, and the duration, how long should the scan be.
-    scan_duration = int(len(mask_files) * total_stim_dur)
+    scan_duration = len(mask_files) * total_stim_dur
     # on average fixation color changes every 20 seconds.
     number_of_rg_switches = int(scan_duration / 20)
     # was fixed at 15 before, but depends on number of masks, etc. 20s approx
@@ -720,7 +720,7 @@ def run(expInfo, thisExp, win, globalClock=None, thisSession=None):
 
     # --- Run Routine "wait_block" ---
 
-    print(f"Scan duration will be {scan_duration} seconds.")
+    print(f"Scan duration will be {scan_duration:.2f} seconds.")
     print("--" * 20)
     print("READY FOR TRIGGER")
     wait_block.forceEnded = routineForceEnded = not continueRoutine
