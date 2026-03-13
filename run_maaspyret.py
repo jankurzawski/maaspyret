@@ -141,41 +141,53 @@ mask_subfolders, carrier_subfolders = get_subfolders(
 # information about this experiment
 # Try to read run_num from existing file, otherwise use default
 
-try:
-    with open("_last_subject.txt", "r") as f:
-        # Can be string, number, etc
-        saved_subject_num = f.read().strip()
-except (FileNotFoundError, ValueError):
-    saved_subject_num = 100  # Default subject number
 
-try:
-    with open("_last_session.txt", "r") as f:
-        # Can be string, number, etc
-        saved_session = f.read().strip()
-except (FileNotFoundError, ValueError):
-    saved_session = 1  # Default session number
+def load_previous_run_info():
 
-try:
-    with open("_last_run.txt", "r") as f:
-        saved_run_num = (
-            int(f.read().strip()) + 1
-        )  # Increment the run number for the next run
-except (FileNotFoundError, ValueError):
-    saved_run_num = 1  # Use the default run_num from expInfo
+    try:
+        with open("_last_subject.txt", "r") as f:
+            # Can be string, number, etc
+            saved_subject_num = f.read().strip()
+    except (FileNotFoundError, ValueError):
+        saved_subject_num = 100  # Default subject number
 
-try:
-    with open("_last_Hz.txt", "r") as f:
-        saved_Hz = float(f.read().strip())  # Increment the run number for the next run
-except (FileNotFoundError, ValueError):
-    saved_Hz = 3.0  # Use the default run_num from expInfo
+    try:
+        with open("_last_session.txt", "r") as f:
+            # Can be string, number, etc
+            saved_session = f.read().strip()
+    except (FileNotFoundError, ValueError):
+        saved_session = 1  # Default session number
 
-try:
-    with open("_last_duration.txt", "r") as f:
-        saved_duration = float(
-            f.read().strip()
-        )  # Increment the run number for the next run
-except (FileNotFoundError, ValueError):
-    saved_duration = 1.0  # Use the default run_num from expInfo
+    try:
+        with open("_last_run.txt", "r") as f:
+            saved_run_num = (
+                int(f.read().strip()) + 1
+            )  # Increment the run number for the next run
+    except (FileNotFoundError, ValueError):
+        saved_run_num = 1  # Use the default run_num from expInfo
+
+    try:
+        with open("_last_Hz.txt", "r") as f:
+            saved_Hz = float(
+                f.read().strip()
+            )  # Increment the run number for the next run
+    except (FileNotFoundError, ValueError):
+        saved_Hz = 3.0  # Use the default run_num from expInfo
+
+    try:
+        with open("_last_duration.txt", "r") as f:
+            saved_duration = float(
+                f.read().strip()
+            )  # Increment the run number for the next run
+    except (FileNotFoundError, ValueError):
+        saved_duration = 1.0  # Use the default run_num from expInfo
+
+    return saved_subject_num, saved_session, saved_run_num, saved_Hz, saved_duration
+
+
+saved_subject_num, saved_session, saved_run_num, saved_Hz, saved_duration = (
+    load_previous_run_info()
+)
 
 # information about this experiment
 expInfo = {
@@ -538,7 +550,25 @@ def run(expInfo, thisExp, win, globalClock=None, thisSession=None):
     stim_hz = float(expInfo["Stim Hz"])  # was 3
     total_stim_dur = float(expInfo["Aperture Duration"])  # was 1
     frame_dur = 1 / stim_hz
-    calc_mask_repeats = stim_hz * total_stim_dur
+    calc_mask_repeats = stim_hz * total_stim_dur  # we want this to be an integer
+
+    if calc_mask_repeats != int(calc_mask_repeats):
+        print("\/" * 30)
+        print(
+            f"Stimulus Hz of {stim_hz} and aperture duration of {total_stim_dur} results in non-integer repeats of {calc_mask_repeats}. Adjusting these values to get an integer number of repeats."
+        )
+        calc_mask_repeats = int(calc_mask_repeats)
+        print("New number of repeats:", calc_mask_repeats)
+        print("\/" * 30)
+
+    if calc_mask_repeats < 1:
+        print("\/" * 30)
+        print(
+            "Calculated number of repeats is less than 1, which is not possible. Setting to 1."
+        )
+        calc_mask_repeats = 1
+        print("New number of repeats:", calc_mask_repeats)
+        print("\/" * 30)
 
     # Load the images and masks here
     # combine the mask and carrier subfolders to make the full paths to the images and masks
@@ -1257,20 +1287,32 @@ if __name__ == "__main__":
     # Run the experiment until the user hits cancel on the expInfo dialog
     while True:
         expInfo = showExpInfoDlg(expInfo=expInfo)
+        #  Because of loop, smash date back in
+        expInfo["date|hid"] = data.getDateStr()
+
         thisExp = setupData(expInfo=expInfo)
         logFile = setupLogging(filename=thisExp.dataFileName)
         win = setupWindow(expInfo=expInfo)
         setupDevices(expInfo=expInfo, thisExp=thisExp, win=win)
         run(expInfo=expInfo, thisExp=thisExp, win=win, globalClock="float")
         saveData(thisExp=thisExp)
-        # When looping, we must purge extra entries in expInfo
+        quit(thisExp=thisExp, win=win)
+
+        # When looping, we must reset some entries.
+        expInfo.pop("date", None)
+        # expInfo.pop("expName", None)
         expInfo.pop("psychopyVersion", None)
-        expInfo.pop("frameRate", None)
         expInfo.pop("expStart", None)
+        expInfo.pop("frameRate", None)
         # Reload these lists - doesn't save selection, unfortunately.
         mask_subfolders, carrier_subfolders = get_subfolders(
             base_mask_folder, base_image_folder
         )
         expInfo["mask"] = mask_subfolders
         expInfo["carrier"] = carrier_subfolders
-        quit(thisExp=thisExp, win=win)
+
+        # Increment run number
+        saved_subject_num, saved_session, saved_run_num, saved_Hz, saved_duration = (
+            load_previous_run_info()
+        )
+        expInfo["run-"] = saved_run_num
