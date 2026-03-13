@@ -25,6 +25,7 @@ All previous parameters EXCEPT mask/carrier are saved.
 
 # Notes on Carrier Stimuli
 Two stimuli are provided currently, but more will be added in the future. 
+
 <img src="./carriers/kendrick_mix/001.png" alt="Noise and Stuff" width="100">
 
 First, stimuli developed by Dr. Kendrick Kay that consist of noise background with objects, sfaces etc. 
@@ -59,7 +60,7 @@ Bar is thinner towards fovea and wider in periphery.
 The log bar stimulus, split into 5ths, with several components shown simulutaneously. 
 Results in shorter overall duration, however is untested outside of simulation.
 
-## Creating new mask stimulus set. 
+## Creating new masks 
 Mask images should be created as grayscle png files, with logical values (0/1) only. 
 The png files should be square, zeropadded such that they appear in the order you want to show them. 
 
