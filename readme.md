@@ -20,6 +20,9 @@ The mask folder is used as a task name, and run numbers are incremented.
 The data file is written out with a "BIDS-like" filename. 
 Note that we do not currently pair runs number increments with bar/wedge etc - run numbers will increment by 1 each time, even for different masks. 
 
+The experiment will loop until you hit cancel or escape to save time on hitting play again.
+All previous parameters EXCEPT mask/carrier are saved. 
+
 # Notes on Carrier Stimuli
 Two stimuli are provided currently, but more will be added in the future. 
 First, stimuli developed by Dr. Kendrick Kay that consist of noise background with objects, sfaces etc. 
