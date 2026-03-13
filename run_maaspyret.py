@@ -96,24 +96,47 @@ _thisDir = os.path.dirname(os.path.abspath(__file__))
 # store info about the experiment session
 psychopyVersion = "2024.2.4"
 expName = "maaspyret"  # from the Builder filename that created this script
-
-
-# Path to the image folder, hard coded, relative to python file
-base_image_folder = "./carriers/"
+# Default Paths, used throughtout, for masks and images.
 base_mask_folder = "./masks/"
+base_image_folder = "./carriers/"
 
-# Read the masks folder, what subfolders do we have?
-mask_subfolders = [
-    f
-    for f in os.listdir(base_mask_folder)
-    if os.path.isdir(os.path.join(base_mask_folder, f))
-]
-# Same for the carriers folder
-carrier_subfolders = [
-    f
-    for f in os.listdir(base_image_folder)
-    if os.path.isdir(os.path.join(base_image_folder, f))
-]
+
+def get_subfolders(base_mask_folder, base_image_folder):
+    """
+    Get the subfolders in the image and mask folders.
+
+    Parameters
+    ==========
+    base_image_folder : str
+        Path to the image folder, hard coded, relative to python file.
+    base_mask_folder : str
+        Path to the mask folder, hard coded, relative to python file.
+
+    Returns
+    ==========
+    tuple of lists
+        List of subfolders in the image folder and list of subfolders in the mask folder.
+    """
+
+    # Read the masks folder, what subfolders do we have?
+    mask_subfolders = [
+        f
+        for f in os.listdir(base_mask_folder)
+        if os.path.isdir(os.path.join(base_mask_folder, f))
+    ]
+    # Same for the carriers folder
+    carrier_subfolders = [
+        f
+        for f in os.listdir(base_image_folder)
+        if os.path.isdir(os.path.join(base_image_folder, f))
+    ]
+    return mask_subfolders, carrier_subfolders
+
+
+# Run this once to populate, then use again in loop in main.
+mask_subfolders, carrier_subfolders = get_subfolders(
+    base_mask_folder=base_mask_folder, base_image_folder=base_image_folder
+)
 
 # information about this experiment
 # Try to read run_num from existing file, otherwise use default
@@ -140,6 +163,20 @@ try:
 except (FileNotFoundError, ValueError):
     saved_run_num = 1  # Use the default run_num from expInfo
 
+try:
+    with open("_last_Hz.txt", "r") as f:
+        saved_Hz = float(f.read().strip())  # Increment the run number for the next run
+except (FileNotFoundError, ValueError):
+    saved_Hz = 3.0  # Use the default run_num from expInfo
+
+try:
+    with open("_last_duration.txt", "r") as f:
+        saved_duration = float(
+            f.read().strip()
+        )  # Increment the run number for the next run
+except (FileNotFoundError, ValueError):
+    saved_duration = 1.0  # Use the default run_num from expInfo
+
 # information about this experiment
 expInfo = {
     "sub-": f"{saved_subject_num}",
@@ -148,8 +185,8 @@ expInfo = {
     "date|hid": data.getDateStr(),
     "expName|hid": expName,
     "psychopyVersion|hid": psychopyVersion,
-    "Stim Hz": 3.0,
-    "Aperture Duration": 1.0,
+    "Stim Hz": f"{saved_Hz:.1f}",
+    "Aperture Duration": f"{saved_duration:.2f}",
     "mask": mask_subfolders,
     "carrier": carrier_subfolders,
 }
@@ -493,6 +530,8 @@ def run(expInfo, thisExp, win, globalClock=None, thisSession=None):
     np.savetxt("_last_subject.txt", [expInfo["sub-"]], fmt="%s")
     np.savetxt("_last_session.txt", [expInfo["ses-"]], fmt="%s")
     np.savetxt("_last_run.txt", [int(expInfo["run-"])], fmt="%02d")
+    np.savetxt("_last_Hz.txt", [float(expInfo["Stim Hz"])], fmt="%.1f")
+    np.savetxt("_last_duration.txt", [float(expInfo["Aperture Duration"])], fmt="%.2f")
 
     # --- Initialize components for Routine "wait_block" ---
 
@@ -1207,18 +1246,31 @@ def quit(thisExp, win=None, thisSession=None):
     logging.flush()
     if thisSession is not None:
         thisSession.stop()
+    # all we skip is this - left in as evidence - loop continues until canncel
     # terminate Python process
-    core.quit()
+    # core.quit()
 
 
 # if running this experiment as a script...
 if __name__ == "__main__":
     # call all functions in order
-    expInfo = showExpInfoDlg(expInfo=expInfo)
-    thisExp = setupData(expInfo=expInfo)
-    logFile = setupLogging(filename=thisExp.dataFileName)
-    win = setupWindow(expInfo=expInfo)
-    setupDevices(expInfo=expInfo, thisExp=thisExp, win=win)
-    run(expInfo=expInfo, thisExp=thisExp, win=win, globalClock="float")
-    saveData(thisExp=thisExp)
-    quit(thisExp=thisExp, win=win)
+    # Run the experiment until the user hits cancel on the expInfo dialog
+    while True:
+        expInfo = showExpInfoDlg(expInfo=expInfo)
+        thisExp = setupData(expInfo=expInfo)
+        logFile = setupLogging(filename=thisExp.dataFileName)
+        win = setupWindow(expInfo=expInfo)
+        setupDevices(expInfo=expInfo, thisExp=thisExp, win=win)
+        run(expInfo=expInfo, thisExp=thisExp, win=win, globalClock="float")
+        saveData(thisExp=thisExp)
+        # When looping, we must purge extra entries in expInfo
+        expInfo.pop("psychopyVersion", None)
+        expInfo.pop("frameRate", None)
+        expInfo.pop("expStart", None)
+        # Reload these lists - doesn't save selection, unfortunately.
+        mask_subfolders, carrier_subfolders = get_subfolders(
+            base_mask_folder, base_image_folder
+        )
+        expInfo["mask"] = mask_subfolders
+        expInfo["carrier"] = carrier_subfolders
+        quit(thisExp=thisExp, win=win)
