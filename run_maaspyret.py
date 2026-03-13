@@ -221,10 +221,11 @@ def setupData(expInfo, dataDir=None):
     # data file name stem = absolute path + name; later add .psyexp, .csv, .log, etc
     if dataDir is None:
         dataDir = _thisDir
-    filename = "data/exp-%s_sub-%s_ses-%s_run-%s_%s" % (
+    filename = "data/exp-%s_sub-%s_ses-%s_task-%s_run-%s_%s" % (
         expInfo["expName"],
         expInfo["sub-"],
         expInfo["ses-"],
+        expInfo["mask"],
         expInfo["run-"],
         expInfo["date"],
     )

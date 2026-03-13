@@ -15,6 +15,11 @@ To run, open the run_maaspyret.py in PsychoPy runner and hit play.
 It will wait for a scanner trigger after loading the images.
 We assume you are using an extended display - and print out details, like ready for trigger and stimlus duration to terminal. 
 
+When you enter subject/session/run numbers, these are saved to the directory and loaded into the dialogue for the next runs. 
+The mask folder is used as a task name, and run numbers are incremented. 
+The data file is written out with a "BIDS-like" filename. 
+Note that we do not currently pair runs number increments with bar/wedge etc - run numbers will increment by 1 each time, even for different masks. 
+
 # Notes on Carrier Stimuli
 Two stimuli are provided currently, but more will be added in the future. 
 First, stimuli developed by Dr. Kendrick Kay that consist of noise background with objects, sfaces etc. 
