@@ -116,9 +116,35 @@ carrier_subfolders = [
 ]
 
 # information about this experiment
+# Try to read run_num from existing file, otherwise use default
+
+try:
+    with open("_last_subject.txt", "r") as f:
+        # Can be string, number, etc
+        saved_subject_num = f.read().strip()
+except (FileNotFoundError, ValueError):
+    saved_subject_num = 100  # Default subject number
+
+try:
+    with open("_last_session.txt", "r") as f:
+        # Can be string, number, etc
+        saved_session = f.read().strip()
+except (FileNotFoundError, ValueError):
+    saved_session = 1  # Default session number
+
+try:
+    with open("_last_run.txt", "r") as f:
+        saved_run_num = (
+            int(f.read().strip()) + 1
+        )  # Increment the run number for the next run
+except (FileNotFoundError, ValueError):
+    saved_run_num = 1  # Use the default run_num from expInfo
+
+# information about this experiment
 expInfo = {
-    "participant": f"{randint(0, 999999):06.0f}",
-    "session": "001",
+    "sub-": f"{saved_subject_num}",
+    "ses-": f"{saved_session}",
+    "run-": f"{saved_run_num:02d}",
     "date|hid": data.getDateStr(),
     "expName|hid": expName,
     "psychopyVersion|hid": psychopyVersion,
@@ -195,7 +221,13 @@ def setupData(expInfo, dataDir=None):
     # data file name stem = absolute path + name; later add .psyexp, .csv, .log, etc
     if dataDir is None:
         dataDir = _thisDir
-    filename = "data/%s_%s_%s" % (expInfo["participant"], expName, expInfo["date"])
+    filename = "data/exp-%s_sub-%s_ses-%s_run-%s_%s" % (
+        expInfo["expName"],
+        expInfo["sub-"],
+        expInfo["ses-"],
+        expInfo["run-"],
+        expInfo["date"],
+    )
     # make sure filename is relative to dataDir
     if os.path.isabs(filename):
         dataDir = os.path.commonprefix([dataDir, filename])
@@ -455,6 +487,11 @@ def run(expInfo, thisExp, win, globalClock=None, thisSession=None):
         frameDur = 1.0 / 60.0  # could not measure, so guess
 
     # Start Code - component code to be run after the window creation
+
+    # Save out the subject/session/run info for next time
+    np.savetxt("_last_subject.txt", [expInfo["sub-"]], fmt="%s")
+    np.savetxt("_last_session.txt", [expInfo["ses-"]], fmt="%s")
+    np.savetxt("_last_run.txt", [int(expInfo["run-"])], fmt="%02d")
 
     # --- Initialize components for Routine "wait_block" ---
 
