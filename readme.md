@@ -30,13 +30,25 @@ They were taken from [here](https://kendrickkay.net/analyzePRF/) and modified fo
 For large collections of carriers, they will be selected randomly and displayed. 
 The next is a 2 checkerboards. If the code detects two images (i.e. your own favorite checkerboard), it will alternate between these. 
 
-# Current Carriers
+# Current Masks
 
 ## bars_nyu
+Straight bars moving back and forth along horizontal, vertical and diagonal axes. Standard bar retinotopy.
 
 ## wedge_nyu
+Wedges (full quadrant sized) rotating around the center and eccentricity rings. 
 
 ## logbar
+Typical bar stimulus, except warped on log scale to match cortical magnification. 
+Bar is thinner towards fovea and wider in periphery.
+
+## log_bar_deconstructed
+The log bar stimulus, split into 5ths, with several components shown simulutaneously. 
+Results in shorter overall duration, however is untested outside of simulation.
+
+## Creating new mask stimulus set. 
+Mask images should be created as grayscle png files, with logical values (0/1) only. 
+The png files should be square, zeropadded such that they appear in the order you want to show them. 
 
 # Notes on Masks
 The length of you scan will be determined by the number of mask images in the subfolder you select and how long you specify you want each mask to appear. 
