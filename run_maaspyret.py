@@ -138,9 +138,6 @@ mask_subfolders, carrier_subfolders = get_subfolders(
     base_mask_folder=base_mask_folder, base_image_folder=base_image_folder
 )
 
-# information about this experiment
-# Try to read run_num from existing file, otherwise use default
-
 
 def load_previous_run_info():
 
@@ -1300,7 +1297,6 @@ if __name__ == "__main__":
 
         # When looping, we must reset some entries.
         expInfo.pop("date", None)
-        # expInfo.pop("expName", None)
         expInfo.pop("psychopyVersion", None)
         expInfo.pop("expStart", None)
         expInfo.pop("frameRate", None)
@@ -1312,7 +1308,5 @@ if __name__ == "__main__":
         expInfo["carrier"] = carrier_subfolders
 
         # Increment run number
-        saved_subject_num, saved_session, saved_run_num, saved_Hz, saved_duration = (
-            load_previous_run_info()
-        )
-        expInfo["run-"] = saved_run_num
+        _, _, saved_run_num, _, _ = load_previous_run_info()
+        expInfo["run-"] = f"{saved_run_num:02d}"
