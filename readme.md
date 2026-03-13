@@ -30,6 +30,14 @@ They were taken from [here](https://kendrickkay.net/analyzePRF/) and modified fo
 For large collections of carriers, they will be selected randomly and displayed. 
 The next is a 2 checkerboards. If the code detects two images (i.e. your own favorite checkerboard), it will alternate between these. 
 
+# Current Carriers
+
+## bars_nyu
+
+## wedge_nyu
+
+## logbar
+
 # Notes on Masks
 The length of you scan will be determined by the number of mask images in the subfolder you select and how long you specify you want each mask to appear. 
 The masks are shown in order - see the folder for an idea of naming and filetype formats.  
